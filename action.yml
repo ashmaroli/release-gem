@@ -1,0 +1,23 @@
+name: Release Ruby Gem
+description: "Tag commits, build and publish a Ruby gem"
+
+inputs:
+  gemspec_name:
+    description: "The filename of the gemspec for the gem to be built and published."
+    required: true
+  workspace:
+    description: >-
+      The root of the project repository. Needed if repo is not checked out to the default
+      location.
+    required: false
+    default: null
+
+runs:
+  using: composite
+  steps:
+    - run: bundle exec ruby ${{ github.action_path }}/publisher.rb
+      shell: bash
+      env:
+        GEMSPEC_NAME: ${{ inputs.gemspec_name }}
+        WORKSPACE: ${{ inputs.workspace || github.workspace }}
+        ACTOR: ${{ github.actor }}
